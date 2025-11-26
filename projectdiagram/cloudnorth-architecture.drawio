@@ -1,0 +1,100 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="cloudnorth-architecture" name="CloudNorth E-commerce Architecture">
+    <mxGraphModel dx="827" dy="570" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- VPC -->
+        <mxCell id="vpc" value="VPC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="800" height="600" as="geometry"/>
+        </mxCell>
+
+        <!-- Public Subnet -->
+        <mxCell id="publicSubnet" value="Public Subnet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="vpc">
+          <mxGeometry x="40" y="40" width="350" height="250" as="geometry"/>
+        </mxCell>
+
+        <!-- Private Subnet -->
+        <mxCell id="privateSubnet" value="Private Subnet" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="vpc">
+          <mxGeometry x="400" y="40" width="350" height="250" as="geometry"/>
+        </mxCell>
+
+        <!-- EC2 Frontend -->
+        <mxCell id="ec2Frontend" value="EC2 Frontend" style="shape=mxgraph.aws.compute.ec2_instance;whiteSpace=wrap;html=1;" vertex="1" parent="publicSubnet">
+          <mxGeometry x="60" y="60" width="60" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- EC2 Backend -->
+        <mxCell id="ec2Backend" value="EC2 Backend" style="shape=mxgraph.aws.compute.ec2_instance;whiteSpace=wrap;html=1;" vertex="1" parent="privateSubnet">
+          <mxGeometry x="420" y="60" width="60" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- RDS Database -->
+        <mxCell id="rds" value="RDS Database" style="shape=mxgraph.aws.database.rds;whiteSpace=wrap;html=1;" vertex="1" parent="privateSubnet">
+          <mxGeometry x="500" y="160" width="60" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- S3 Bucket -->
+        <mxCell id="s3" value="S3 Bucket" style="shape=mxgraph.aws.storage.s3;whiteSpace=wrap;html=1;" vertex="1" parent="publicSubnet">
+          <mxGeometry x="150" y="150" width="60" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- EKS Cluster -->
+        <mxCell id="eks" value="EKS Cluster" style="shape=mxgraph.aws.containers.eks;whiteSpace=wrap;html=1;" vertex="1" parent="vpc">
+          <mxGeometry x="300" y="300" width="100" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- GitHub Server -->
+        <mxCell id="githubServer" value="GitHub (Source Control)" style="shape=mxgraph.cisco.servers;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="650" width="80" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Prometheus -->
+        <mxCell id="prometheus" value="Prometheus" style="shape=mxgraph.c4.monitoring;whiteSpace=wrap;html=1;" vertex="1" parent="vpc">
+          <mxGeometry x="600" y="300" width="60" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Grafana -->
+        <mxCell id="grafana" value="Grafana" style="shape=mxgraph.c4.monitoring;whiteSpace=wrap;html=1;" vertex="1" parent="vpc">
+          <mxGeometry x="680" y="300" width="60" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- CloudWatch -->
+        <mxCell id="cloudwatch" value="CloudWatch" style="shape=mxgraph.aws.management.cloudwatch;whiteSpace=wrap;html=1;" vertex="1" parent="vpc">
+          <mxGeometry x="640" y="400" width="60" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Connections -->
+        <mxCell id="frontendToBackend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="ec2Frontend" target="ec2Backend">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="backendToRDS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="ec2Backend" target="rds">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="frontendToS3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="ec2Frontend" target="s3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="eksToBackend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="eks" target="ec2Backend">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="jenkinsToFrontend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="jenkins" target="ec2Frontend">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="monitoringToAll" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="prometheus" target="grafana">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="grafanaToCloudwatch" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="grafana" target="cloudwatch">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
